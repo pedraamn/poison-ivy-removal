@@ -33,30 +33,26 @@ import re
 @dataclass(frozen=True)
 class SiteConfig:
     service_name: str = "Poison Ivy Removal"
-    brand_name: str = "Poison Ivy Removal Company"
+    brand_name: str = "Poison Ivy Removal Service"
     cta_text: str = "Get Free Estimate"
     cta_href: str = "mailto:hello@example.com?subject=Free%20Quote%20Request"
     output_dir: Path = Path("public")
-    # NOTE: Set these to your real pricing bands. Kept simple placeholders.
     cost_low: int = 250
-    cost_high: int = 750
+    cost_high: int = 800
 
 
 CONFIG = SiteConfig()
 
 # Controlled H2 set (city pages ONLY pull headings from this list)
-# Built from Ahrefs intent patterns around:
-# "how to kill poison ivy in your yard", "kill roots", "what will kill poison ivy",
-# "without killing other plants", "permanently kill poison ivy", etc.
 H2_HEADINGS = [
     "How to identify poison ivy",
-    "What makes poison ivy come back",
-    "Manual removal vs herbicide treatments",
-    "How to kill poison ivy roots permanently",
-    "Protecting nearby plants, pets, and kids",
-    "Cleanup and disposal to avoid spreading oils",
-    "When to hire a professional",
+    "How poison ivy spreads in a yard",
+    "Best way to remove poison ivy safely",
+    "Killing poison ivy roots for long-term control",
+    "What to do with poison ivy vines and debris",
+    "When to hire professional poison ivy removal",
     "Cost estimate",
+    "Service area",
 ]
 
 CITIES: list[tuple[str, str]] = [
@@ -83,9 +79,9 @@ CITIES: list[tuple[str, str]] = [
 ]
 
 # Prefer a local image so it always works on Cloudflare Pages.
-# Reusing your existing local assets (you can swap to a poison-ivy photo later if you add one).
-LOCAL_IMAGE_CITY = "/assets/front-door.jpg"
-LOCAL_IMAGE_HOME = "/assets/front-door.jpg"
+# Put a royalty-free image at: public/assets/poison-ivy.jpg
+LOCAL_IMAGE_CITY = "/assets/poison-ivy.jpg"
+LOCAL_IMAGE_HOME = "/assets/poison-ivy.jpg"
 
 
 # -----------------------
@@ -389,7 +385,7 @@ def city_page(*, city: str, state: str) -> str:
     title = h1  # EXACT match per your rule
 
     description = clamp_title(
-        f"Poison ivy removal guidance: how pros kill roots, limit regrowth, and what affects cost in {city}, {state}.",
+        f"Poison ivy removal pricing, what affects cost, and what a pro handles — for {city}, {state}.",
         155,
     )
 
@@ -400,7 +396,7 @@ def city_page(*, city: str, state: str) -> str:
   <div class="wrap hero">
     <h1>{esc(h1)}</h1>
     <p class="sub">
-      Practical guidance on removing poison ivy, preventing regrowth, and what typically affects the total cost.
+      Clear guidance on safe removal, long-term control, and typical pricing for yard work.
     </p>
     <a class="btn" href="{esc(CONFIG.cta_href)}">{esc(CONFIG.cta_text)}</a>
   </div>
@@ -409,59 +405,56 @@ def city_page(*, city: str, state: str) -> str:
 <main class="wrap">
   <div class="grid">
     <section class="card">
-      <div class="pill">Local removal guide</div>
+      <div class="pill">Local cost guide</div>
 
       <div class="img" style="margin-top:12px;">
-        <img src="{esc(LOCAL_IMAGE_CITY)}" alt="Exterior entryway and surrounding landscaping" loading="lazy" />
+        <img src="{esc(LOCAL_IMAGE_CITY)}" alt="Yard vegetation detail" loading="lazy" />
       </div>
 
       <h2>{esc(H2_HEADINGS[0])}</h2>
       <p>
-        Poison ivy often grows as a ground cover or climbing vine with clusters of three leaflets.
-        Because look-alikes exist, identification usually focuses on growth pattern, leaflet shape, and where the plant is spreading.
+        Poison ivy often grows as a vine or low shrub. It can climb trees, fences, and walls.
+        Many people remember the “leaves of three” rule, but leaf shape can change across seasons.
       </p>
 
       <h2>{esc(H2_HEADINGS[1])}</h2>
       <p>
-        Regrowth is common when roots remain, vines re-sprout from buried stems, or birds spread seeds.
-        A lasting plan usually includes removing visible growth and treating the root system over time.
+        Poison ivy spreads through roots, runners, and seeds. Small patches can turn into larger areas over time.
+        Cutting vines can also trigger new growth if roots stay in the ground.
       </p>
 
       <h2>{esc(H2_HEADINGS[2])}</h2>
       <p>
-        Manual removal can work for small patches if done carefully, but it can be labor-intensive.
-        Targeted herbicide treatments may be more effective for established vines—especially when the goal is permanent control.
+        A safe plan reduces skin contact and limits spread. Crews use protective gear, control the work area,
+        and remove plant material without dragging it across the yard.
+      </p>
+      <p class="muted">
+        Note: If you have a rash or exposure concerns, talk with a medical professional. This page focuses on yard removal.
       </p>
 
       <h2>{esc(H2_HEADINGS[3])}</h2>
       <p>
-        “Permanent” results typically come from addressing roots and repeating control steps as needed.
-        Timing, coverage, and follow-up matter—particularly for mature vines climbing fences, trees, or structures.
+        Long-term results depend on what happens below the surface. If roots remain, poison ivy can return.
+        A pro can choose a method that targets regrowth and fits the site.
       </p>
 
       <h2>{esc(H2_HEADINGS[4])}</h2>
       <p>
-        A careful approach helps protect nearby plants and reduces exposure risk for pets and kids.
-        Pros often use targeted application and containment so the treatment stays where it’s needed.
+        Bag and handle debris as contaminated plant material. Do not burn it.
+        Tools, gloves, and clothing can also carry oil and should be cleaned after the job.
       </p>
 
       <h2>{esc(H2_HEADINGS[5])}</h2>
       <p>
-        Oils from the plant can transfer to gloves, tools, clothing, and yard waste.
-        Cleanup usually includes bagging debris properly, cleaning tools, and avoiding actions that spread residue around the property.
-      </p>
-
-      <h2>{esc(H2_HEADINGS[6])}</h2>
-      <p>
-        Professional help is most useful when vines are extensive, climbing high, mixed into landscaping,
-        or when you need a plan that reduces regrowth and limits exposure risk.
+        Professional poison ivy removal makes sense for large patches, hard-to-reach areas, and properties with
+        repeat regrowth. It also helps when the plant has climbed trees or spread along fences.
       </p>
 
       <hr />
 
-      <h2>{esc(H2_HEADINGS[7])}</h2>
+      <h2>{esc(H2_HEADINGS[6])}</h2>
       <p class="muted">
-        Estimated service cost in {esc(city)}, {esc(state)} (many projects):
+        Estimated project pricing in {esc(city)}, {esc(state)} (most jobs):
       </p>
 
       <table class="table" aria-label="Cost estimate table">
@@ -476,13 +469,18 @@ def city_page(*, city: str, state: str) -> str:
           <tr>
             <td>{esc(CONFIG.service_name)}</td>
             <td>${CONFIG.cost_low}–${CONFIG.cost_high}</td>
-            <td>Area size, vine maturity, access, disposal needs, follow-up visits</td>
+            <td>Patch size, access, vines in trees, disposal, repeat visits</td>
           </tr>
         </tbody>
       </table>
 
       <p class="muted" style="margin-top:10px;">
-        These are typical ranges—actual quotes vary by site conditions and how established the growth is.
+        These are typical ranges. A quote depends on site conditions and the removal method.
+      </p>
+
+      <h2>{esc(H2_HEADINGS[7])}</h2>
+      <p>
+        We serve homeowners and property managers across the metro area. City pages provide local context and pricing ranges.
       </p>
     </section>
   </div>
@@ -490,8 +488,8 @@ def city_page(*, city: str, state: str) -> str:
 
 <footer>
   <div class="footer-card">
-    <h2>Ready to move forward?</h2>
-    <p>Ready to move forward? Request a free quote</p>
+    <h2>Ready to move forward? Request a free quote</h2>
+    <p>Tell us where the poison ivy is and how large the area is. We’ll reply with next steps.</p>
     <a class="btn" href="{esc(CONFIG.cta_href)}">{esc(CONFIG.cta_text)}</a>
     <div class="small">
       © {esc(CONFIG.brand_name)}. All rights reserved.
@@ -507,12 +505,11 @@ def city_page(*, city: str, state: str) -> str:
 
 
 def homepage(*, cities: list[tuple[str, str]]) -> str:
-    # Homepage H1 must be general (NOT location-specific), title == H1, <= 70 chars
-    h1 = clamp_title("Poison Ivy Removal: How to Kill It Permanently", 70)
+    h1 = clamp_title("Poison Ivy Removal Cost: Typical Pricing & What Affects It", 70)
     title = h1
 
     description = clamp_title(
-        "Learn how poison ivy is removed, what kills roots, what affects cost, and find local estimates by city.",
+        "Typical poison ivy removal pricing, what affects the total, and local pages by city.",
         155,
     )
 
@@ -526,8 +523,8 @@ def homepage(*, cities: list[tuple[str, str]]) -> str:
   <div class="wrap hero">
     <h1>{esc(h1)}</h1>
     <p class="sub">
-      Most poison ivy removal projects fall between ${CONFIG.cost_low} and ${CONFIG.cost_high}, depending on how established the growth is.
-      Choose your city for local estimates.
+      Many jobs fall between ${CONFIG.cost_low} and ${CONFIG.cost_high}. Price depends on patch size, access,
+      and whether vines climbed trees or fences.
     </p>
     <a class="btn" href="{esc(CONFIG.cta_href)}">{esc(CONFIG.cta_text)}</a>
   </div>
@@ -538,37 +535,28 @@ def homepage(*, cities: list[tuple[str, str]]) -> str:
     <div class="pill">Nationwide overview</div>
 
     <div class="img" style="margin-top:12px;">
-      <img src="{esc(LOCAL_IMAGE_HOME)}" alt="Exterior entryway and surrounding landscaping" loading="lazy" />
+      <img src="{esc(LOCAL_IMAGE_HOME)}" alt="Yard vegetation detail" loading="lazy" />
     </div>
 
-    <h2>What kills poison ivy permanently?</h2>
+    <h2>Poison ivy removal vs poison ivy control</h2>
     <p>
-      Long-term control usually means addressing the root system and planning for follow-up.
-      Many properties need more than a single pass—especially where vines are mature or spreading through landscaping beds.
+      Removal focuses on clearing visible growth. Control focuses on reducing regrowth over time.
+      Some sites need both, especially when roots spread under soil.
     </p>
 
-    <h2>Remove poison ivy from your yard safely</h2>
-    <p>
-      Poison ivy can transfer oils onto tools, gloves, clothing, and yard waste.
-      A safe removal plan focuses on containment, careful handling, and cleanup steps that reduce accidental spread.
-    </p>
+    <h2>What affects poison ivy removal cost</h2>
+    <ul>
+      <li><strong>Patch size:</strong> More area means more labor and more debris.</li>
+      <li><strong>Access:</strong> Steep slopes and tight side yards take longer.</li>
+      <li><strong>Vines in trees:</strong> Work becomes slower and needs extra care.</li>
+      <li><strong>Disposal:</strong> Bagging and hauling adds time and fees.</li>
+      <li><strong>Repeat visits:</strong> Some sites need follow-up for regrowth.</li>
+    </ul>
 
-    <h2>Manual removal vs targeted treatments</h2>
+    <h2>How to get rid of poison ivy in your yard</h2>
     <p>
-      Small patches may be manageable with careful manual removal, while established vines often require a more structured approach.
-      Targeted treatments can help reduce regrowth, especially when vines climb fences, trees, or structures.
-    </p>
-
-    <h2>Kill poison ivy without damaging other plants</h2>
-    <p>
-      When poison ivy is mixed into hedges or garden beds, precision matters.
-      Pros often focus on targeted application and site-specific steps to protect nearby plants while controlling the vine.
-    </p>
-
-    <h2>Poison ivy removal cost: what affects the price</h2>
-    <p>
-      Pricing usually depends on the size of the area, how established the vines are, access, disposal needs,
-      and whether follow-up visits are recommended for regrowth control.
+      The goal is to remove plant material and stop roots from coming back.
+      A good plan limits skin contact and keeps contaminated debris contained.
     </p>
 
     <hr />
@@ -585,8 +573,8 @@ def homepage(*, cities: list[tuple[str, str]]) -> str:
 
 <footer>
   <div class="footer-card">
-    <h2>Ready to move forward?</h2>
-    <p>Ready to move forward? Request a free quote</p>
+    <h2>Ready to move forward? Request a free quote</h2>
+    <p>Share the location and size of the patch. We’ll respond with a simple plan and estimate.</p>
     <a class="btn" href="{esc(CONFIG.cta_href)}">{esc(CONFIG.cta_text)}</a>
     <div class="small">© {esc(CONFIG.brand_name)}. All rights reserved.</div>
   </div>
